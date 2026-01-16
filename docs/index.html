@@ -51,6 +51,20 @@ img { max-width:100%; margin-top:10px; }
   <p id="progress"></p>
 </div>
 
+<!-- SITUATION COMPLETE -->
+<div class="container" id="situationComplete" style="display:none;">
+  <h2 id="completeTitle">Situation Complete</h2>
+  <p id="completeScore"></p>
+
+  <button onclick="restartSituation()" style="background:#ff9800;color:#fff;">
+    Restart This Situation
+  </button>
+
+  <button onclick="showSituationMenu()">
+    Back to Situation Menu
+  </button>
+</div>
+
 <div class="watermark">tikbalang reviewer</div>
 
 <script>
@@ -3282,6 +3296,35 @@ function loadQuestion() {
   document.getElementById("nextBtn").style.display = "none";
 }
 
+function showSituationComplete() {
+  const s = situations[currentSituation];
+
+  document.getElementById("quiz").style.display = "none";
+  document.getElementById("situationMenu").style.display = "none";
+  document.getElementById("summary").style.display = "none";
+  document.getElementById("situationComplete").style.display = "block";
+
+  document.getElementById("completeTitle").innerText =
+    currentSituation;
+
+  document.getElementById("completeScore").innerText =
+    `Score: ${s.score} / ${s.questions.length}`;
+}
+
+function restartSituation() {
+  const s = situations[currentSituation];
+
+  s.index = 0;
+  s.score = 0;
+  s.completed = false;
+
+  document.getElementById("situationComplete").style.display = "none";
+  document.getElementById("quiz").style.display = "block";
+
+  loadQuestion();
+}
+
+
 /* ========= CHECK ANSWER ========= */
 function checkAnswer(btn, choice) {
   const s = situations[currentSituation];
@@ -3313,7 +3356,7 @@ function nextQuestion() {
     loadQuestion();
   } else {
     s.completed = true;
-    showSituationMenu(); // ← always return to menu
+    showSituationComplete();
   }
 }
 </script>
